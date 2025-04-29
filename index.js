@@ -1,36 +1,66 @@
-#!/usr/bin/env node
-
-const [,, command, ...args] = process.argv;
+const readline = require('readline');
 const {
-  listTodos,
-  addTodo,
-  completeTodo,
-  deleteTodo,
-} = require('./todo');
+  addNote,
+  listNotes,
+  readNote,
+  deleteNote,
+  updateNote
+} = require('./notes');
 
-(async () => {
-  switch (command) {
-    case 'list':
-      await listTodos();
-      break;
-    case 'add':
-      const title = args.join(' ');
-      if (!title) return console.log('Please provide a todo title.');
-      await addTodo(title);
-      break;
-    case 'done':
-      await completeTodo(parseInt(args[0]));
-      break;
-    case 'delete':
-      await deleteTodo(parseInt(args[0]));
-      break;
-    default:
-      console.log(`
-Usage:
-  node index.js list               - List all todos
-  node index.js add "task"        - Add a new todo
-  node index.js done <index>      - Mark todo as completed
-  node index.js delete <index>    - Delete a todo
-      `);
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+function ask(question) {
+  return new Promise(resolve => rl.question(question, resolve));
+}
+
+async function main() {
+  console.log('🗂️ Welcome to Note Manager!\n');
+  console.log('Commands: add, list, read, delete, update, exit\n');
+
+  while (true) {
+    const command = await ask('> Enter command: ');
+
+    switch (command.trim().toLowerCase()) {
+      case 'add':
+        const title = await ask('Title: ');
+        const content = await ask('Content: ');
+        await addNote(title, content);
+        break;
+
+      case 'list':
+        await listNotes();
+        break;
+
+      case 'read':
+        const readTitle = await ask('Title to read: ');
+        await readNote(readTitle);
+        break;
+
+      case 'delete':
+        const deleteTitle = await ask('Title to delete: ');
+        await deleteNote(deleteTitle);
+        break;
+
+      case 'update':
+        const updateTitle = await ask('Title to update: ');
+        const newContent = await ask('New content: ');
+        await updateNote(updateTitle, newContent);
+        break;
+
+      case 'exit':
+        rl.close();
+        console.log('👋 Goodbye!');
+        return;
+
+      default:
+        console.log('❓ Unknown command.');
+    }
+
+    console.log(); // space after each action
   }
-})();
+}
+
+main();
