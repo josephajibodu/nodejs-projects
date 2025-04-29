@@ -1,12 +1,7 @@
 <pre>
-
-  todo-cli/
-│
-├── data/
-│   └── todos.json
-├── utils/
-│   └── fileHandler.js
-├── todo.js
-└── index.js
-
+note-manager/
+├── index.js
+├── notes.js
+└── data/
+    └── notes.json
 </pre>
