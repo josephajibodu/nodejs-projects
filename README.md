@@ -1,4 +1,6 @@
-todo-cli/
+<pre>
+
+  todo-cli/
 │
 ├── data/
 │   └── todos.json
@@ -6,3 +8,5 @@ todo-cli/
 │   └── fileHandler.js
 ├── todo.js
 └── index.js
+
+</pre>
